@@ -1,4 +1,4 @@
-$(document).ready(main);
+window.onload=main;
 
 function main()
 {
@@ -14,19 +14,89 @@ function main()
 
 function loadData(d)
 {
-    var userImg=$(".userimg");
-    userImg[0].src=d.image;
+    var userImg=document.querySelector(".userimg");
+    userImg.src=d.image;
+
+    setMusic(d);
 
     if (d.title)
     {
-        $(".title")[0].innerHTML=d.title;
+        var dtitle=document.querySelector(".title");
+        
+        dtitle.innerHTML=d.title;
+        document.title=d.title;
+        
+        if (d.titlecolour)
+        {
+            dtitle.style.color=d.titlecolour;
+        }
     }
-
+    
     if (d.tall==1)
     {
-        userImg[0].classList.add("tall");
+        userImg.classList.add("tall");
     }
 }
+
+var playerObject;
+function setMusic(d)
+{
+    var startTime=0;
+
+    if (d.start)
+    {
+        startTime=d.start;
+    }
+    
+    var playerVars=
+        {loop:1,
+         autoplay:1,
+         start:startTime};
+
+    if (d.end)
+    {
+        playerVars.end=d.end;
+    }
+
+    var eventObject=
+        {
+            onStateChange:function(e){
+                if (e.data==YT.PlayerState.ENDED)
+                {
+                    player.playVideo();
+                    player.seekTo(startTime);
+                }
+            }
+        };
+    
+    playerObject=
+        {
+            width:0,
+            height:0,
+            videoId:d.audio.slice(32),
+            playerVars:playerVars,
+            events:eventObject
+        };
+
+    loadYT();
+}
+
+/*-- required by youtube api --*/
+var player;
+function loadYT()
+{
+    var tag = document.createElement('script');
+
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
+
+function onYouTubeIframeAPIReady()
+{
+    player= new YT.Player("player",playerObject);
+}
+/*-- end required by youtube api --*/
 
 function loadInput()
 {
@@ -65,7 +135,7 @@ function loadInput()
     return result;
 }
 
-var allowedPars=["title","tall","start","end","center"];
+var allowedPars=["title","tall","start","end","titlecolour"];
 function additionalPar(par,result)
 {
     par=par.split("=");
