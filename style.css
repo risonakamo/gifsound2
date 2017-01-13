@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+body
+{
+    margin: 0;
+}
+
+p
+{
+    margin: 0;
+}
+
+.userimg
+{
+    width: 100%;
+}
+
+userimg.tall
+{
+    width: auto;
+    height: 100%;
+}
+
+.title
+{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 30px;
+    text-align: right;
+    color: white;
+    font-size: 80px;
+    font-family: roboto;
+}
+
+.music
+{
+    display: none;
+}
