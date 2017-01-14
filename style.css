@@ -10,6 +10,14 @@ p
     margin: 0;
 }
 
+.help
+{
+    position: relative;
+    margin: auto;
+    margin-top: 200px;
+    width: 1000px;    
+}
+
 .img-contain
 {
     position: absolute;
@@ -17,6 +25,20 @@ p
     height: 100%;
     overflow: hidden;
     text-align: center;
+}
+
+.example-link
+{
+    position: absolute;
+    left: 30px;
+    bottom: 32px;
+    width: 825px;
+    height: 19px;
+}
+
+.hidden
+{
+    display: none;
 }
 
 .userimg

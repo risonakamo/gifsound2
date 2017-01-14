@@ -6,10 +6,22 @@ function main()
 
     if (hashData==-1)
     {
+        setExLink();
         return;
     }
 
     loadData(hashData);
+}
+
+function setExLink()
+{
+    var exLink=document.querySelector(".example-link");
+
+    exLink.addEventListener("click",function(e){
+        e.preventDefault();
+        window.location.hash="#http://i.imgur.com/ddT4VtK.gif#https://www.youtube.com/watch?v=RGD-lhFtiCg#title=kurokon";
+        window.location.reload();
+    });
 }
 
 function loadData(d)
@@ -36,6 +48,9 @@ function loadData(d)
     {
         userImg.classList.add("tall");
     }
+
+    document.querySelector(".img-contain").classList.remove("hidden");
+    document.querySelector(".help").classList.add("hidden");
 }
 
 var playerObject;
