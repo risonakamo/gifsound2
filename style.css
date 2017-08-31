@@ -1,71 +1,115 @@
 @charset "UTF-8";
 
+@font-face
+{
+    font-family: "rm-r";
+    src: url("fonts/ff2.ttf") format("truetype");
+}
+
+@font-face
+{
+    font-family: "rm-l";
+    src: url("fonts/ff1.ttf") format("truetype");
+}
+
+@font-face
+{
+    font-family: "rm-b";
+    src: url("fonts/ff3.ttf") format("truetype");
+}
+
+html
+{
+    height: 100%;
+    width: 100%;
+}
+
 body
 {
-    margin: 0;
-}
-
-p
-{
-    margin: 0;
-}
-
-.help
-{
-    position: relative;
-    margin: auto;
-    margin-top: 200px;
-    width: 1000px;    
-}
-
-.img-contain
-{
-    position: absolute;
-    width: 100%;
     height: 100%;
-    overflow: hidden;
-    text-align: center;
+    width: 100%;
+    margin: 0;
+    font-family: "rm-r";
+    font-size: 0;
 }
 
-.example-link
+.vid-container
 {
     position: absolute;
-    left: 30px;
-    bottom: 32px;
-    width: 825px;
-    height: 19px;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.video
+{
+    margin-top: 50px;
+    width: 1px;
+    height: 1px;
+}
+
+.image
+{
+    height: 100%;
+}
+
+.wide
+{
+    height: auto;
+    width: 100%;
 }
 
 .hidden
 {
+    width: 0;
+    height: 0;
     display: none;
 }
 
-.userimg
+.link-template
 {
-    width: 100%;
+    height: 50px;
 }
 
-.tall
+.link-template span
 {
-    width: auto;
-    height: 100%;
+    display: inline-block;
+    font-size: 30px;
 }
 
-.title
+.link-template-text
 {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 30px;
-    text-align: right;
-    color: white;
-    font-size: 80px;
-    font-family: roboto;
+    height: 50px;
 }
 
-.music
+.imgur-colour
 {
-    display: none;
+    color: #1bb76e;
+    border-color: #1bb76e;
+}
+
+.youtube-colour
+{
+    color: #cc181e;
+    border-color: #cc181e;
+}
+
+.other-colour
+{
+    color: #aeaeae;
+    border-color: #aeaeae;
+}
+
+.link-input
+{
+    min-width: 80px;
+    border-bottom: 2px solid;
+}
+
+.link-input:focus
+{
+    outline: none;
 }

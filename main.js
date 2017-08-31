@@ -2,172 +2,84 @@ window.onload=main;
 
 function main()
 {
-    hashData=loadInput();
+    parseUrl();
+}
 
-    if (hashData==-1)
+function parseUrl()
+{
+    var urlInput=window.location.hash.split("#");
+
+    //requires youtube id and imgur img link
+    if (urlInput.length<3)
     {
-        setExLink();
         return;
     }
 
-    loadData(hashData);
-}
+    var vidurl=urlInput[1];
+    var imgurl="http://i.imgur.com/"+urlInput[2];
+    var options={start:0,end:0,loop:1,wide:0};
 
-function setExLink()
-{
-    var exLink=document.querySelector(".example-link");
-
-    exLink.addEventListener("click",function(e){
-        e.preventDefault();
-        window.location.hash="#http://i.imgur.com/ddT4VtK.gif#https://www.youtube.com/watch?v=RGD-lhFtiCg#title=kurokon";
-        window.location.reload();
-    });
-}
-
-function loadData(d)
-{
-    var userImg=document.querySelector(".userimg");
-    userImg.src=d.image;
-
-    setMusic(d);
-
-    if (d.title)
+    if (urlInput.length>3)
     {
-        var dtitle=document.querySelector(".title");
-        
-        dtitle.innerHTML=d.title;
-        document.title=d.title;
-        
-        if (d.titlecolour)
+        var value;
+        for (var x=3;x<urlInput.length;x++)
         {
-            dtitle.style.color=d.titlecolour;
-        }
-    }
-    
-    if (d.tall==1)
-    {
-        userImg.classList.add("tall");
-    }
+            value=urlInput[x].split("=");
 
-    document.querySelector(".img-contain").classList.remove("hidden");
-    document.querySelector(".help").classList.add("hidden");
-}
-
-var playerObject;
-function setMusic(d)
-{
-    var startTime=0;
-
-    if (d.start)
-    {
-        startTime=d.start;
-    }
-    
-    var playerVars=
-        {loop:1,
-         autoplay:1,
-         start:startTime};
-
-    if (d.end)
-    {
-        playerVars.end=d.end;
-    }
-
-    var eventObject=
-        {
-            onStateChange:function(e){
-                if (e.data==YT.PlayerState.ENDED)
+            if (value.length==2)
+            {
+                if (value[0]=="start" || value[0]=="end" ||
+                    value[0]=="loop" || value[0]=="wide")
                 {
-                    player.playVideo();
-                    player.seekTo(startTime);
+                    options[value[0]]=value[1];
                 }
             }
-        };
-    
-    playerObject=
-        {
-            width:0,
-            height:0,
-            videoId:d.audio.slice(32),
-            playerVars:playerVars,
-            events:eventObject
-        };
-
-    loadYT();
-}
-
-/*-- required by youtube api --*/
-var player;
-function loadYT()
-{
-    var tag = document.createElement('script');
-
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-}
-
-function onYouTubeIframeAPIReady()
-{
-    player= new YT.Player("player",playerObject);
-}
-/*-- end required by youtube api --*/
-
-function loadInput()
-{
-    var windowHash=window.location.hash;
-    if (windowHash[0]=="#")
-    {
-        windowHash=windowHash.substr(1);
-    }
-
-    else
-    {
-        return -1;
-    }
-    
-    var input=windowHash.split("#");
-
-    if (input.length<2)
-    {
-        return -1;
-    }
-
-    var result={};
-    result.image=input[0];
-    result.audio=input[1];
-
-    if (input.length<2)
-    {
-        return result;
-    }
-    
-    for (var x=2;x<input.length;x++)
-    {
-        additionalPar(input[x],result);
-    }
-
-    return result;
-}
-
-var allowedPars=["title","tall","start","end","titlecolour"];
-function additionalPar(par,result)
-{
-    par=par.split("=");
-
-    if (par.length!=2)
-    {
-        return -1;
-    }
-
-    for (var x=0;x<allowedPars.length;x++)
-    {
-        if (par[0]==allowedPars[x])
-        {
-            result[par[0]]=par[1];
-            return 0;
         }
     }
 
-    return -1;
+    loadImg(imgurl,options.wide,vidurl,options);
+}
+
+//set wide=1 to scale by width
+function loadImg(img,wide,vidurl,options)
+{
+    var imgInsert=document.querySelector(".image");
+
+    imgInsert.src=img;
+
+    if (wide)
+    {
+        imgInsert.classList.add("wide");
+    }
+
+    imgInsert.onload=()=>{
+        imgInsert.classList.remove("hidden");
+        loadVideo(vidurl,options.start,options.end,options.loop);
+    };
+}
+
+function loadVideo(id,start=0,end=0,loop=1)
+{
+    var video=document.querySelector(".video");
+
+    var playerVars={
+        autoplay:1,
+        start:start,
+        end:end,
+        loop:loop
+    };
+
+    if (!end)
+    {
+        delete playerVars.end;
+    }
+
+    var player=new YT.Player(video,{videoId:id,playerVars:playerVars,events:{
+        onStateChange:(state)=>{
+            if (state.data==0)
+            {
+                player.seekTo(start);
+            }
+        }
+    }});
 }
